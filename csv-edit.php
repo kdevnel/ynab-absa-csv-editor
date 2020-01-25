@@ -1,6 +1,5 @@
 <?php
-echo 'test';
-$file_handle = fopen('widgets.csv', 'r') ;
+$file_handle = fopen('csv/widgets.csv', 'r') ;
 $html = '<div>';
 
 while (!feof($file_handle)) {
