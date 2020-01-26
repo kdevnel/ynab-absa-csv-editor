@@ -35,22 +35,45 @@ $results = parse_csv_file($file_handle);
 // Iterate through the CSV array
 $keys = array_keys($results);
 for ($i = 0; $i < count($results); $i++) {
+
+    //Add a memo field
+    $results[$i]['Memo'] = '';
+
     foreach ($results[$keys[$i]] as $key => $value) {
 
-        // Modify the date to a compatible format
-        if ($key == 'Date') {
-            $value = date('d-m-Y', strtotime($value));
-        }
-
-        // Modify the descriptions to something more friendly
-        if ($key == 'Description') {
-            $searchString = 'POS PURCHASE';
-            if (strpos($value, $searchString) !== false) {
-                $description = explode(')', $value);
-                echo '<pre>';
-                print_r($description);
-                echo '</pre>';
-            }
+        switch ($key) {
+            case 'Date':
+                // Modify the date to a compatible format
+                $value = date('d-m-Y', strtotime($value));
+                break;
+            case 'Description':
+                // $searchString = 'POS PURCHASE';
+                $searchStrings = array(
+                    'POS PURCHASE',
+                    'OVERSEAS PURCHASE'
+                );
+                foreach ($searchStrings as $searchString) {
+                    switch ($searchString) {
+                        case 'POS PURCHASE':
+                            if (strpos($value, $searchString) !== false) {
+                                $description = explode(')', $value);
+                                $value = trim($description[1]);
+                                $memo = $description[0] . ')';
+                            }
+                            break;
+                        case 'OVERSEAS PURCHASE':
+                            if (strpos($value, $searchString) !== false) {
+                                $description = explode(')', $value);
+                                $value = trim($description[2]);
+                                $memo = $description[0] . ')' . $description[1] . ')';
+                            }
+                            break;
+                    }
+                }
+                break;
+            case 'Memo':
+                $value = trim($memo);
+                break;
         }
 
         // Output the end result
@@ -58,3 +81,7 @@ for ($i = 0; $i < count($results); $i++) {
     }
     echo '<br>';
 }
+
+// echo '<pre>';
+// print_r($results);
+// echo '</pre>';
