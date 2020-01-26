@@ -34,6 +34,7 @@ $results = parse_csv_file($file_handle);
 
 // Iterate through the CSV array
 $keys = array_keys($results);
+
 for ($i = 0; $i < count($results); $i++) {
 
     //Add a memo field
@@ -41,6 +42,7 @@ for ($i = 0; $i < count($results); $i++) {
 
     foreach ($results[$keys[$i]] as $key => $value) {
 
+        $value = trim(preg_replace('/\s+/', ' ', $value));
         switch ($key) {
             case 'Date':
                 // Modify the date to a compatible format
@@ -78,10 +80,17 @@ for ($i = 0; $i < count($results); $i++) {
 
         // Output the end result
         echo $key . ' : ' . $value . '<br>';
+        $csvData[$i][$key] = $value;
     }
     echo '<br>';
 }
 
-// echo '<pre>';
-// print_r($results);
-// echo '</pre>';
+$file_handle = fopen("csv/testoutput.csv", "w");
+
+$header = array('Date', 'Description', 'Amount', 'Balance', 'Memo');
+
+array_unshift($csvData, $header);
+
+foreach ($csvData as $csvOutput) {
+    fputcsv($file_handle, $csvOutput);
+}
