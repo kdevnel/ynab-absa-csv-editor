@@ -35,6 +35,8 @@ $results = parse_csv_file($file_handle);
 // Iterate through the CSV array
 $keys = array_keys($results);
 
+$csvData = array();
+
 for ($i = 0; $i < count($results); $i++) {
 
     //Add a memo field
@@ -78,18 +80,32 @@ for ($i = 0; $i < count($results); $i++) {
                 break;
         }
 
+
+
         // Output the end result
-        echo $key . ' : ' . $value . '<br>';
+        // echo $key . ' : ' . $value . '<br>';
         $csvData[$i][$key] = $value;
     }
-    echo '<br>';
+    // echo '<br>';
 }
 
+// Rearrange the CSV Data Columns
+$array_template = array('Date', 'Description', 'Memo', 'Amount', 'Balance');
+$template = array_flip($array_template);
+foreach ($csvData as &$x) {
+    //replace values in the template
+    $x = array_replace($template, $x);
+}
+
+echo '<pre>';
+print_r($csvData);
+echo '</pre>';
+
+// Create the updated CSV
 $file_handle = fopen("csv/testoutput.csv", "w");
 
-$header = array('Date', 'Description', 'Amount', 'Balance', 'Memo');
-
-array_unshift($csvData, $header);
+// Add the header row
+array_unshift($csvData, $array_template);
 
 foreach ($csvData as $csvOutput) {
     fputcsv($file_handle, $csvOutput);
