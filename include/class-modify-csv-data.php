@@ -18,23 +18,23 @@ class ModifyCSVData
      * @param array $array_to_change
      * @return $array_to_change
      */
-    public function rearrangeCSVColumns($array_to_change)
+    public function rearrangeCSVColumns($arrayColumnsToChange)
     {
         // Rearrange the CSV Data Columns
         $template = array_flip($this->columnTemplate);
-        foreach ($array_to_change as &$x) {
+        foreach ($arrayColumnsToChange as &$x) {
             //replace values in the template
             $x = array_replace($template, $x);
         }
 
-        return $array_to_change;
+        return $arrayColumnsToChange;
     }
 
     /**
      * Modify the CSV results into the YNAB-friendly format
      *
      * @param array $csvResults
-     * @return void
+     * @return $csvData
      */
     public function modifyCSVResults($csvResults)
     {
@@ -49,6 +49,7 @@ class ModifyCSVData
         for ($i = 0; $i < count($csvResults); $i++) {
 
             //Add a memo field
+
             $csvResults[$i]['Memo'] = '';
 
             foreach ($csvResults[$keys[$i]] as $key => $value) {
@@ -60,7 +61,6 @@ class ModifyCSVData
                         $value = date('d-m-Y', strtotime($value));
                         break;
                     case 'Description':
-                        // $searchString = 'POS PURCHASE';
                         $searchStrings = array(
                             'POS PURCHASE',
                             'OVERSEAS PURCHASE'
@@ -89,13 +89,8 @@ class ModifyCSVData
                         break;
                 }
 
-
-
-                // Output the end result
-                // echo $key . ' : ' . $value . '<br>';
                 $csvData[$i][$key] = $value;
             }
-            // echo '<br>';
         }
 
         $csvData = $this->rearrangeCSVColumns($csvData);
