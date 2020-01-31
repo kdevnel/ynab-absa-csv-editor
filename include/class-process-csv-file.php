@@ -47,16 +47,16 @@ class ProcessCSVFile
      * The function to create the newly formatted CSV file
      *
      * @param array $csvData
-     * @param array $array_template
+     * @param array $columnTemplate
      * @return void
      */
-    public function createCSV($csvData, $array_template)
+    public function createCSV($csvData, $columnTemplate)
     {
         // Create the updated CSV
         $file_handle = fopen("csv/testoutput.csv", "w");
 
         // Add the header row
-        array_unshift($csvData, $array_template);
+        array_unshift($csvData, $columnTemplate);
 
         foreach ($csvData as $csvOutput) {
             fputcsv($file_handle, $csvOutput);

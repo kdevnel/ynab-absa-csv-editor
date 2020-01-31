@@ -6,16 +6,22 @@
 class ModifyCSVData
 {
     /**
+     * The CSV and data column order template for output
+     *
+     * @var array
+     */
+    public $columnTemplate = array('Date', 'Description', 'Memo', 'Amount', 'Balance');
+
+    /**
      * Rearrange the column order to be compatible with YNAB
      *
      * @param array $array_to_change
-     * @param array $array_template
      * @return $array_to_change
      */
-    public function rearrangeCSVColumns($array_to_change, $array_template)
+    public function rearrangeCSVColumns($array_to_change)
     {
         // Rearrange the CSV Data Columns
-        $template = array_flip($array_template);
+        $template = array_flip($this->columnTemplate);
         foreach ($array_to_change as &$x) {
             //replace values in the template
             $x = array_replace($template, $x);
@@ -28,10 +34,9 @@ class ModifyCSVData
      * Modify the CSV results into the YNAB-friendly format
      *
      * @param array $csvResults
-     * @param array $array_template
      * @return void
      */
-    public function modifyCSVResults($csvResults, $array_template)
+    public function modifyCSVResults($csvResults)
     {
         $csvData = array();
 
@@ -93,11 +98,7 @@ class ModifyCSVData
             // echo '<br>';
         }
 
-        // New column layout template
-        // $array_template = array('Date', 'Description', 'Memo', 'Amount', 'Balance');
-
-        // $csvData = rearrangeCSVColumns($csvData, $array_template);
-        $csvData = $this->rearrangeCSVColumns($csvData, $array_template);
+        $csvData = $this->rearrangeCSVColumns($csvData);
 
         return $csvData;
     }

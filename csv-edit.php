@@ -10,11 +10,11 @@ $array_template = array('Date', 'Description', 'Memo', 'Amount', 'Balance');
 
 // Modify data ready for output
 $modifyData = new ModifyCSVData();
-$finalisedData = $modifyData->modifyCSVResults($processCSV->readCSVFile(), $array_template);
+$finalisedData = $modifyData->modifyCSVResults($processCSV->readCSVFile());
 
 // Render the user interface
 $publicOutput = new PublicDisplay();
 $publicOutput->displayRawData($finalisedData);
 
 // Output the final CSV file
-$processCSV->createCSV($finalisedData, $array_template);
+$processCSV->createCSV($finalisedData, $modifyData->columnTemplate);
