@@ -5,9 +5,6 @@ require_once 'include/class-public-display.php';
 
 $processCSV = new ProcessCSVFile();
 
-// New column layout template
-$array_template = array('Date', 'Description', 'Memo', 'Amount', 'Balance');
-
 // Modify data ready for output
 $modifyData = new ModifyCSVData();
 $finalisedData = $modifyData->modifyCSVResults($processCSV->readCSVFile());
@@ -17,4 +14,4 @@ $publicOutput = new PublicDisplay();
 $publicOutput->displayRawData($finalisedData);
 
 // Output the final CSV file
-$processCSV->createCSV($finalisedData, $modifyData->columnTemplate);
+$processCSV->createCSV($finalisedData, $modifyData->getColumnTemplate());

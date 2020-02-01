@@ -10,7 +10,17 @@ class ProcessCSVFile
      *
      * @var string
      */
-    public $fileHandle = 'csv/TransactionHistory.csv';
+    private $fileHandle = '';
+
+    public function setFileHandle($location)
+    {
+        $this->fileHandle = $location;
+    }
+
+    public function getFileHandle()
+    {
+        return $this->fileHandle;
+    }
 
     /**
      * Read a CSV file and return an array of results
@@ -19,9 +29,10 @@ class ProcessCSVFile
      */
     public function readCSVFile()
     {
+        $this->setFileHandle('csv/TransactionHistory.csv');
         $csvData = array();
         $rowcount = 0;
-        if (($handle = fopen($this->fileHandle, "r")) !== FALSE) {
+        if (($handle = fopen($this->getFileHandle(), "r")) !== FALSE) {
             $header = fgetcsv($handle);
             $header_colcount = count($header);
             while (($row = fgetcsv($handle)) !== FALSE) {
@@ -37,7 +48,7 @@ class ProcessCSVFile
             }
             fclose($handle);
         } else {
-            error_log("csvreader: Could not read CSV \"$this->fileHandle\"");
+            error_log("csvreader: Could not read CSV \"$this->getFileHandle()\"");
             return null;
         }
         return $csvData;
@@ -52,14 +63,16 @@ class ProcessCSVFile
      */
     public function createCSV($csvData, $columnTemplate)
     {
+        $this->setFileHandle('csv/testoutput.csv');
+
         // Create the updated CSV
-        $file_handle = fopen("csv/testoutput.csv", "w");
+        $outputFileHandle = fopen($this->getFileHandle(), "w");
 
         // Add the header row
         array_unshift($csvData, $columnTemplate);
 
         foreach ($csvData as $csvOutput) {
-            fputcsv($file_handle, $csvOutput);
+            fputcsv($outputFileHandle, $csvOutput);
         }
     }
 }

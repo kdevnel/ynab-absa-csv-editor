@@ -10,7 +10,17 @@ class ModifyCSVData
      *
      * @var array
      */
-    public $columnTemplate = array('Date', 'Description', 'Memo', 'Amount', 'Balance');
+    private $columnTemplate = array('Date', 'Description', 'Memo', 'Amount', 'Balance');
+
+    public function setColumnTemplate($value)
+    {
+        $this->columnTemplate = $value;
+    }
+
+    public function getColumnTemplate()
+    {
+        return $this->columnTemplate;
+    }
 
     /**
      * Rearrange the column order to be compatible with YNAB
