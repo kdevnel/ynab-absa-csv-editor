@@ -13,10 +13,8 @@ class PublicDisplay
      */
     public function displayRawData($data)
     {
-        echo '<html style="background:#333;">';
-        echo '<pre style="color:#fff;">';
+        echo '<pre>';
         print_r($data);
         echo '</pre>';
-        echo '</html>';
     }
 }

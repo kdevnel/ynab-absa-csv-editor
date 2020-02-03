@@ -11,7 +11,6 @@ $finalisedData = $modifyData->modifyCSVResults($processCSV->readCSVFile());
 
 // Render the user interface
 $publicOutput = new PublicDisplay();
-$publicOutput->displayRawData($finalisedData);
 
 // Output the final CSV file
 $processCSV->createCSV($finalisedData, $modifyData->getColumnTemplate());
